@@ -2,7 +2,7 @@
 
 A mobile-first clinic management app for **Western Pacific University's campus clinic** (Ialibu), built with **Angular 18** (standalone components + signals). Patients can book appointments, view diagnoses, and track medical history; nurses can manage the patient roster, confirm appointments, and monitor clinic workflow — all inside a phone-frame UI in a midnight-blue and gold theme.
 
-This is an Angular rebuild of an earlier vanilla HTML/CSS/JS prototype, developed as part of **CMP324 Computer Project II- Implementation and Development** coursework at Western Pacific University.
+This is an Angular rebuild of an earlier vanilla HTML/CSS/JS prototype, developed as part of **CMP324 – Computer Project II: Development & Implementation coursework at Western Pacific University.
 
 ![Angular](https://img.shields.io/badge/Angular-18-DD0031?logo=angular&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?logo=typescript&logoColor=white)
@@ -20,10 +20,23 @@ This is an Angular rebuild of an earlier vanilla HTML/CSS/JS prototype, develope
 - Browse full medical history timeline
 
 **Nurse**
-- Searchable patient records roster
+- Searchable patient records roster (by name, ID, or contact number)
 - View any patient's detail, diagnosis, and history
 - Confirm pending appointments
 - Live "System Workflow" clinic-status dashboard
+- **Register a new patient** (full intake form)
+- **Edit an existing patient's** demographic/contact details
+- **Record a clinic visit** with vitals (BP, temp, pulse, weight), symptoms,
+  diagnosis, treatment, and notes — kept as an append-only history per patient
+- **Walk-in triage queue** — add/remove patients, auto-sorted by urgency
+  (Emergency → High → Medium → Low) then arrival time, with filtering
+- **Daily reports** — attendance summary, new registrations, visits, and
+  current queue snapshot for any chosen date, with a print/export button
+
+**App-wide**
+- Works offline: a service worker caches the app shell, and data is saved to
+  `localStorage` so it survives a page reload
+- An offline banner appears automatically when the connection drops
 
 ---
 
@@ -48,7 +61,7 @@ No backend: all data lives in an in-memory `DataService` (Angular signals), matc
 
 ---
 
-##  Getting started
+## Getting started
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/) 18+ and npm
@@ -103,7 +116,7 @@ public/
 └── wpu-logo.png
 ```
 
-##  Routes
+## Routes
 
 ```
 /login
@@ -115,11 +128,28 @@ public/
 /records/:id       Nurse only — one patient's detail
 /history           Any logged-in role (nurse gets a patient picker)
 /workflow           Nurse only
+/register-patient   Nurse only — new patient intake
+/queue              Nurse only — walk-in triage queue
+/reports            Nurse only — daily attendance report
 ```
 
 ---
 
-##  Course context
+## Ported from ProTech WPU Clinic Registration System
+
+| ProTech feature (`app.js`) | Angular equivalent |
+|---|---|
+| Patient registration form | `src/app/pages/register-patient/register-patient.component.ts` |
+| Queue management (add/sort/filter/remove) | `src/app/pages/queue/queue.component.ts` |
+| "Record Medical Information" (vitals + visit) | Added to `src/app/pages/patient-detail/patient-detail.component.ts` |
+| Edit patient record | Added to `src/app/pages/patient-detail/patient-detail.component.ts` |
+| Daily report generator + export | `src/app/pages/reports/reports.component.ts` |
+| `saveDataToStorage` / `loadDataFromStorage` | Added to `src/app/services/data.service.ts` (`persist()` / `restore()`) |
+| `initOfflineSupport` / connection status | `src/app/services/connectivity.service.ts` + `src/app/shared/offline-banner.component.ts` |
+| `service-worker.js` | `public/service-worker.js` (rewritten as cache-as-you-go to work with Angular's hashed build output) |
+| `manifest.json` | `public/manifest.json` |
+
+## Course context
 
 | | |
 |---|---|
@@ -132,6 +162,6 @@ See `CHANGELOG.md` for how this build progressed across submission milestones.
 
 ---
 
-##  License
+## License
 
 Academic project — for coursework purposes. No license granted for external reuse unless stated otherwise.

@@ -1,167 +1,27 @@
-# WPU Digital Clinic Book 🩺
+# WpuMedicsDigitalClinicBook
 
-A mobile-first clinic management app for **Western Pacific University's campus clinic** (Ialibu), built with **Angular 18** (standalone components + signals). Patients can book appointments, view diagnoses, and track medical history; nurses can manage the patient roster, confirm appointments, and monitor clinic workflow — all inside a phone-frame UI in a midnight-blue and gold theme.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.21.
 
-This is an Angular rebuild of an earlier vanilla HTML/CSS/JS prototype, developed as part of **CMP324 – Computer Project II: Development & Implementation coursework at Western Pacific University.
+## Development server
 
-![Angular](https://img.shields.io/badge/Angular-18-DD0031?logo=angular&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?logo=typescript&logoColor=white)
-![Status](https://img.shields.io/badge/status-in%20development-yellow)
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
----
+## Code scaffolding
 
-## Features
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-**Patient**
-- Role-based login with demo credentials
-- Book an appointment (provider, reason, date, time)
-- View and track appointment status (Pending / Confirmed)
-- View latest diagnosis, vitals, and prescriptions
-- Browse full medical history timeline
+## Build
 
-**Nurse**
-- Searchable patient records roster (by name, ID, or contact number)
-- View any patient's detail, diagnosis, and history
-- Confirm pending appointments
-- Live "System Workflow" clinic-status dashboard
-- **Register a new patient** (full intake form)
-- **Edit an existing patient's** demographic/contact details
-- **Record a clinic visit** with vitals (BP, temp, pulse, weight), symptoms,
-  diagnosis, treatment, and notes — kept as an append-only history per patient
-- **Walk-in triage queue** — add/remove patients, auto-sorted by urgency
-  (Emergency → High → Medium → Low) then arrival time, with filtering
-- **Daily reports** — attendance summary, new registrations, visits, and
-  current queue snapshot for any chosen date, with a print/export button
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-**App-wide**
-- Works offline: a service worker caches the app shell, and data is saved to
-  `localStorage` so it survives a page reload
-- An offline banner appears automatically when the connection drops
+## Running unit tests
 
----
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Screenshots
+## Running end-to-end tests
 
-> _Add screenshots here once the app is running — e.g. `docs/screenshots/login.png`, `docs/screenshots/patient-dashboard.png`._
+Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-| Login | Patient Dashboard | Nurse Dashboard |
-|---|---|---|
-| ![login](docs/screenshots/login.png) | ![patient](docs/screenshots/patient-dashboard.png) | ![nurse](docs/screenshots/nurse-dashboard.png) |
+## Further help
 
----
-
-## Tech stack
-
-- **Angular 18** — standalone components, signals, new `@if`/`@for` control flow
-- **TypeScript 5.5**
-- **Angular Router** — lazy-loaded routes, functional `canMatch` guards
-- Plain CSS (no framework) — custom theme in `src/styles.css`
-
-No backend: all data lives in an in-memory `DataService` (Angular signals), matching the original static prototype's behaviour — data resets on page reload.
-
----
-
-## Getting started
-
-### Prerequisites
-- [Node.js](https://nodejs.org/) 18+ and npm
-- [Angular CLI](https://angular.dev/tools/cli) (optional, `npx` works without a global install)
-
-### Install & run
-
-```bash
-git clone https://github.com/<your-username>/wpu-digital-clinic-book.git
-cd wpu-digital-clinic-book
-npm install
-npm start
-```
-
-Open **http://localhost:4200**.
-
-### Demo logins
-
-| Role    | Email               | Password    |
-|---------|---------------------|-------------|
-| Patient | patient@wpu.ac.pg   | patient123  |
-| Nurse   | nurse@wpu.ac.pg     | nurse123    |
-
----
-
-##  Project structure
-
-```
-src/
-├── app/
-│   ├── guards/           # Route guards (role-based access)
-│   ├── models/           # Shared TypeScript interfaces
-│   ├── services/         # DataService, AuthService, ToastService
-│   ├── shared/           # Reusable UI components (appbar, bottom-nav, tile, chip, toast)
-│   ├── pages/             # One folder per screen
-│   │   ├── login/
-│   │   ├── patient-dashboard/
-│   │   ├── nurse-dashboard/
-│   │   ├── appointments/
-│   │   ├── records/
-│   │   ├── patient-detail/
-│   │   ├── diagnosis/
-│   │   ├── history/
-│   │   └── workflow/
-│   ├── app.component.ts   # Root shell (phone-frame wrapper)
-│   ├── app.config.ts      # App-wide providers
-│   └── app.routes.ts      # Route table
-├── styles.css              # Global theme (midnight blue / gold / white)
-├── index.html
-└── main.ts
-public/
-└── wpu-logo.png
-```
-
-## Routes
-
-```
-/login
-/patient          Patient dashboard
-/nurse             Nurse dashboard
-/appointments      Role-aware: booking form (patient) or schedule + confirm (nurse)
-/diagnosis         Patient only
-/records            Nurse only — searchable roster
-/records/:id       Nurse only — one patient's detail
-/history           Any logged-in role (nurse gets a patient picker)
-/workflow           Nurse only
-/register-patient   Nurse only — new patient intake
-/queue              Nurse only — walk-in triage queue
-/reports            Nurse only — daily attendance report
-```
-
----
-
-## Ported from ProTech WPU Clinic Registration System
-
-| ProTech feature (`app.js`) | Angular equivalent |
-|---|---|
-| Patient registration form | `src/app/pages/register-patient/register-patient.component.ts` |
-| Queue management (add/sort/filter/remove) | `src/app/pages/queue/queue.component.ts` |
-| "Record Medical Information" (vitals + visit) | Added to `src/app/pages/patient-detail/patient-detail.component.ts` |
-| Edit patient record | Added to `src/app/pages/patient-detail/patient-detail.component.ts` |
-| Daily report generator + export | `src/app/pages/reports/reports.component.ts` |
-| `saveDataToStorage` / `loadDataFromStorage` | Added to `src/app/services/data.service.ts` (`persist()` / `restore()`) |
-| `initOfflineSupport` / connection status | `src/app/services/connectivity.service.ts` + `src/app/shared/offline-banner.component.ts` |
-| `service-worker.js` | `public/service-worker.js` (rewritten as cache-as-you-go to work with Angular's hashed build output) |
-| `manifest.json` | `public/manifest.json` |
-
-## Course context
-
-| | |
-|---|---|
-| **Course** | CMP324 |
-| **Institution** | Western Pacific University |
-| **Assignment** | Software Development & Testing Project — WPU Digital Clinic Book |
-| **This repo covers** | Task 3: rebuilding the Task 1/2 prototype in Angular |
-
-See `CHANGELOG.md` for how this build progressed across submission milestones.
-
----
-
-## License
-
-Academic project — for coursework purposes. No license granted for external reuse unless stated otherwise.
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
